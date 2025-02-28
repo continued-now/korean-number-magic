@@ -2,10 +2,12 @@
 import React, { useState } from 'react';
 import NumberInput from '../components/NumberInput';
 import ResultDisplay from '../components/ResultDisplay';
+import AutocompleteInput, { AutocompleteOption } from '../components/AutocompleteInput';
 
 const Index = () => {
   const [inputValue, setInputValue] = useState('');
   const [number, setNumber] = useState<number | null>(null);
+  const [selectedOption, setSelectedOption] = useState<AutocompleteOption | null>(null);
   
   const handleInputChange = (value: string) => {
     setInputValue(value);
@@ -14,6 +16,24 @@ const Index = () => {
   const handleNumberChange = (value: number | null) => {
     setNumber(value);
   };
+
+  const handleOptionSelect = (option: AutocompleteOption | null) => {
+    setSelectedOption(option);
+  };
+  
+  // Sample autocomplete options
+  const autocompleteOptions: AutocompleteOption[] = [
+    { id: '1', name: '서울', description: '대한민국의 수도' },
+    { id: '2', name: '부산', description: '제2의 도시, 항구도시' },
+    { id: '3', name: '인천', description: '국제공항이 있는 도시' },
+    { id: '4', name: '대구', description: '경상북도의 중심 도시' },
+    { id: '5', name: '광주', description: '전라남도의 중심 도시' },
+    { id: '6', name: '대전', description: '충청남도의 중심 도시' },
+    { id: '7', name: '울산', description: '공업도시' },
+    { id: '8', name: '세종', description: '행정중심복합도시' },
+    { id: '9', name: '경기도', description: '서울을 둘러싼 지역' },
+    { id: '10', name: '강원도', description: '산과 바다가 있는 지역' },
+  ];
   
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-b from-background to-secondary/30 px-4 py-12">
@@ -45,6 +65,36 @@ const Index = () => {
                 number={number} 
                 className="transition-all duration-500"
               />
+            </div>
+          </div>
+          
+          {/* Autocomplete Input */}
+          <div className="pt-8 pb-2 space-y-4 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+            <div className="text-center space-y-2">
+              <h2 className="text-xl font-light tracking-tight">
+                도시 검색
+              </h2>
+              <p className="text-muted-foreground text-sm max-w-sm mx-auto">
+                한국의 도시를 검색해보세요
+              </p>
+            </div>
+            
+            <div className="max-w-md mx-auto">
+              <AutocompleteInput 
+                options={autocompleteOptions}
+                onSelect={handleOptionSelect}
+                placeholder="도시 이름을 입력하세요"
+              />
+              
+              {selectedOption && (
+                <div className="mt-4 p-4 bg-white/80 backdrop-blur-sm rounded-lg border border-border/30 shadow-md">
+                  <h3 className="font-medium text-primary">선택된 도시:</h3>
+                  <div className="mt-2">
+                    <p className="text-lg font-medium">{selectedOption.name}</p>
+                    <p className="text-muted-foreground">{selectedOption.description}</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           
