@@ -17,7 +17,7 @@ const Index = () => {
   
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-b from-background to-secondary/30 px-4 py-12">
-      <div className="w-full max-w-md mx-auto">
+      <div className="w-full max-w-4xl mx-auto">
         <div className="space-y-8 animate-fade-in">
           {/* Header */}
           <div className="text-center space-y-2">
@@ -51,7 +51,7 @@ const Index = () => {
           {/* Examples */}
           <div className="pt-6 space-y-3 animate-slide-up" style={{ animationDelay: "0.2s" }}>
             <h3 className="text-sm font-medium text-center text-muted-foreground">예시</h3>
-            <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
               <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 border border-border/30">
                 <div className="text-muted-foreground">10,000</div>
                 <div className="font-medium">1만</div>

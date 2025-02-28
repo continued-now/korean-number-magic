@@ -21,6 +21,15 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ number, className = '' })
   const englishFormat = number !== null ? formatToEnglish(number) : '';
   const scientificFormat = number !== null ? formatToScientific(number) : '';
   
+  const handleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      // You could add a toast notification here
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+  
   if (number === null) {
     return (
       <div className={`rounded-xl p-6 bg-secondary/50 backdrop-blur-sm ${className}`}>
@@ -33,15 +42,18 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ number, className = '' })
   
   return (
     <div className={`rounded-xl p-6 bg-white/80 backdrop-blur-sm shadow-md animate-scale-in border border-border/30 ${className}`}>
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-1">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-medium text-muted-foreground">한국어 단위 표기</h3>
             <CopyButton text={koreanFormat} />
           </div>
-          <div className="bg-secondary/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center">
+          <button 
+            onClick={() => handleCopy(koreanFormat)}
+            className="w-full bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center transition-colors duration-200"
+          >
             <p className="text-lg font-medium text-center break-all">{koreanFormat}</p>
-          </div>
+          </button>
         </div>
         
         <div className="space-y-1">
@@ -49,9 +61,12 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ number, className = '' })
             <h3 className="text-sm font-medium text-muted-foreground">쉼표 형식</h3>
             <CopyButton text={commaFormat} />
           </div>
-          <div className="bg-secondary/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center">
+          <button 
+            onClick={() => handleCopy(commaFormat)}
+            className="w-full bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center transition-colors duration-200"
+          >
             <p className="text-lg font-medium text-center break-all">{commaFormat}</p>
-          </div>
+          </button>
         </div>
         
         <div className="space-y-1">
@@ -59,9 +74,12 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ number, className = '' })
             <h3 className="text-sm font-medium text-muted-foreground">한자어 독음</h3>
             <CopyButton text={sinoKoreanFormat} />
           </div>
-          <div className="bg-secondary/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center">
+          <button 
+            onClick={() => handleCopy(sinoKoreanFormat)}
+            className="w-full bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center transition-colors duration-200"
+          >
             <p className="text-lg font-medium text-center break-all">{sinoKoreanFormat}</p>
-          </div>
+          </button>
         </div>
         
         <div className="space-y-1">
@@ -69,19 +87,25 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ number, className = '' })
             <h3 className="text-sm font-medium text-muted-foreground">영어 표기</h3>
             <CopyButton text={englishFormat} />
           </div>
-          <div className="bg-secondary/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center">
+          <button 
+            onClick={() => handleCopy(englishFormat)}
+            className="w-full bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center transition-colors duration-200"
+          >
             <p className="text-lg font-medium text-center break-all">{englishFormat}</p>
-          </div>
+          </button>
         </div>
         
-        <div className="space-y-1">
+        <div className="space-y-1 md:col-span-2">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-medium text-muted-foreground">과학적 표기법</h3>
             <CopyButton text={scientificFormat} />
           </div>
-          <div className="bg-secondary/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center">
+          <button 
+            onClick={() => handleCopy(scientificFormat)}
+            className="w-full bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center transition-colors duration-200"
+          >
             <p className="text-lg font-medium text-center break-all">{scientificFormat.replace(/\^(\d+)/, (_, p1) => '⁰¹²³⁴⁵⁶⁷⁸⁹'.split('')[parseInt(p1)])}</p>
-          </div>
+          </button>
         </div>
       </div>
     </div>
