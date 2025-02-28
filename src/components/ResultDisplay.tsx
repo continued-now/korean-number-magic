@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   formatToKorean, 
   formatWithCommas, 
@@ -15,20 +15,28 @@ interface ResultDisplayProps {
 }
 
 const ResultDisplay: React.FC<ResultDisplayProps> = ({ number, className = '' }) => {
-  const koreanFormat = number !== null ? formatToKorean(number) : '';
-  const commaFormat = number !== null ? formatWithCommas(number) : '';
-  const sinoKoreanFormat = number !== null ? formatToSinoKorean(number) : '';
-  const englishFormat = number !== null ? formatToEnglish(number) : '';
-  const scientificFormat = number !== null ? formatToScientific(number) : '';
+  const [koreanFormat, setKoreanFormat] = useState('');
+  const [commaFormat, setCommaFormat] = useState('');
+  const [sinoKoreanFormat, setSinoKoreanFormat] = useState('');
+  const [englishFormat, setEnglishFormat] = useState('');
+  const [scientificFormat, setScientificFormat] = useState('');
   
-  const handleCopy = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      // You could add a toast notification here
-    } catch (err) {
-      console.error('Failed to copy text: ', err);
+  // Update formatted values when number changes
+  useEffect(() => {
+    if (number !== null) {
+      setKoreanFormat(formatToKorean(number));
+      setCommaFormat(formatWithCommas(number));
+      setSinoKoreanFormat(formatToSinoKorean(number));
+      setEnglishFormat(formatToEnglish(number));
+      setScientificFormat(formatToScientific(number));
+    } else {
+      setKoreanFormat('');
+      setCommaFormat('');
+      setSinoKoreanFormat('');
+      setEnglishFormat('');
+      setScientificFormat('');
     }
-  };
+  }, [number]);
   
   if (number === null) {
     return (
@@ -48,12 +56,14 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ number, className = '' })
             <h3 className="text-sm font-medium text-muted-foreground">한국어 단위 표기</h3>
             <CopyButton text={koreanFormat} />
           </div>
-          <button 
-            onClick={() => handleCopy(koreanFormat)}
-            className="w-full bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center transition-colors duration-200"
-          >
-            <p className="text-lg font-medium text-center break-all">{koreanFormat}</p>
-          </button>
+          <div className="relative bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 transition-colors duration-200">
+            <input
+              type="text"
+              value={koreanFormat}
+              onChange={(e) => setKoreanFormat(e.target.value)}
+              className="w-full bg-transparent outline-none text-lg font-medium text-center"
+            />
+          </div>
         </div>
         
         <div className="space-y-1">
@@ -61,12 +71,14 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ number, className = '' })
             <h3 className="text-sm font-medium text-muted-foreground">쉼표 형식</h3>
             <CopyButton text={commaFormat} />
           </div>
-          <button 
-            onClick={() => handleCopy(commaFormat)}
-            className="w-full bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center transition-colors duration-200"
-          >
-            <p className="text-lg font-medium text-center break-all">{commaFormat}</p>
-          </button>
+          <div className="relative bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 transition-colors duration-200">
+            <input
+              type="text"
+              value={commaFormat}
+              onChange={(e) => setCommaFormat(e.target.value)}
+              className="w-full bg-transparent outline-none text-lg font-medium text-center"
+            />
+          </div>
         </div>
         
         <div className="space-y-1">
@@ -74,12 +86,14 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ number, className = '' })
             <h3 className="text-sm font-medium text-muted-foreground">한자어 독음</h3>
             <CopyButton text={sinoKoreanFormat} />
           </div>
-          <button 
-            onClick={() => handleCopy(sinoKoreanFormat)}
-            className="w-full bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center transition-colors duration-200"
-          >
-            <p className="text-lg font-medium text-center break-all">{sinoKoreanFormat}</p>
-          </button>
+          <div className="relative bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 transition-colors duration-200">
+            <input
+              type="text"
+              value={sinoKoreanFormat}
+              onChange={(e) => setSinoKoreanFormat(e.target.value)}
+              className="w-full bg-transparent outline-none text-lg font-medium text-center"
+            />
+          </div>
         </div>
         
         <div className="space-y-1">
@@ -87,12 +101,14 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ number, className = '' })
             <h3 className="text-sm font-medium text-muted-foreground">영어 표기</h3>
             <CopyButton text={englishFormat} />
           </div>
-          <button 
-            onClick={() => handleCopy(englishFormat)}
-            className="w-full bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center transition-colors duration-200"
-          >
-            <p className="text-lg font-medium text-center break-all">{englishFormat}</p>
-          </button>
+          <div className="relative bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 transition-colors duration-200">
+            <input
+              type="text"
+              value={englishFormat}
+              onChange={(e) => setEnglishFormat(e.target.value)}
+              className="w-full bg-transparent outline-none text-lg font-medium text-center"
+            />
+          </div>
         </div>
         
         <div className="space-y-1 md:col-span-2">
@@ -100,12 +116,14 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ number, className = '' })
             <h3 className="text-sm font-medium text-muted-foreground">과학적 표기법</h3>
             <CopyButton text={scientificFormat} />
           </div>
-          <button 
-            onClick={() => handleCopy(scientificFormat)}
-            className="w-full bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 flex items-center justify-center transition-colors duration-200"
-          >
-            <p className="text-lg font-medium text-center break-all">{scientificFormat.replace(/\^(\d+)/, (_, p1) => '⁰¹²³⁴⁵⁶⁷⁸⁹'.split('')[parseInt(p1)])}</p>
-          </button>
+          <div className="relative bg-secondary/70 hover:bg-green-100/70 backdrop-blur-sm rounded-lg p-3 min-h-12 transition-colors duration-200">
+            <input
+              type="text"
+              value={scientificFormat.replace(/\^(\d+)/, (_, p1) => '⁰¹²³⁴⁵⁶⁷⁸⁹'.split('')[parseInt(p1)])}
+              onChange={(e) => setScientificFormat(e.target.value)}
+              className="w-full bg-transparent outline-none text-lg font-medium text-center"
+            />
+          </div>
         </div>
       </div>
     </div>

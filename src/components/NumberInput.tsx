@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { isValidNumber } from '../utils/formatNumber';
+import { parseKoreanNumber } from '../utils/parseNumber';
 
 interface NumberInputProps {
   value: string;
@@ -19,22 +20,36 @@ const NumberInput: React.FC<NumberInputProps> = ({ value, onChange, onNumberChan
       return;
     }
 
-    if (!isValidNumber(value)) {
-      setError('숫자만 입력해주세요');
-      onNumberChange(null);
+    // Try to parse as a regular number first
+    if (isValidNumber(value)) {
+      const parsedValue = Number(value);
+      if (isNaN(parsedValue)) {
+        setError('유효한 숫자가 아닙니다');
+        onNumberChange(null);
+        return;
+      }
+
+      // Valid number
+      setError(null);
+      onNumberChange(parsedValue);
       return;
     }
 
-    const parsedValue = Number(value);
-    if (isNaN(parsedValue)) {
-      setError('유효한 숫자가 아닙니다');
-      onNumberChange(null);
-      return;
+    // If not a valid number format, try to parse Korean number words
+    try {
+      const parsedNumber = parseKoreanNumber(value);
+      if (parsedNumber !== null) {
+        setError(null);
+        onNumberChange(parsedNumber);
+        return;
+      }
+    } catch (e) {
+      // Failed to parse as Korean number words
     }
 
-    // Valid number
-    setError(null);
-    onNumberChange(parsedValue);
+    // If we get here, neither numeric nor word format worked
+    setError('숫자 또는 한글 숫자 단어를 입력해주세요');
+    onNumberChange(null);
   }, [value, onNumberChange]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +71,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ value, onChange, onNumberChan
           onChange={handleChange}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          placeholder="숫자를 입력하세요"
+          placeholder="숫자 또는 '일만', '삼억' 등 한글로 입력하세요"
           className={`w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-border/50 outline-none text-lg ${
             error ? 'border-destructive/30 text-destructive' : ''
           }`}
