@@ -53,19 +53,19 @@ const Index = () => {
             <h3 className="text-sm font-medium text-center text-muted-foreground">예시</h3>
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 border border-border/30">
-                <div className="text-muted-foreground">10000</div>
+                <div className="text-muted-foreground">10,000</div>
                 <div className="font-medium">1만</div>
               </div>
               <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 border border-border/30">
-                <div className="text-muted-foreground">100000000</div>
+                <div className="text-muted-foreground">100,000,000</div>
                 <div className="font-medium">1억</div>
               </div>
               <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 border border-border/30">
-                <div className="text-muted-foreground">1000000000000</div>
+                <div className="text-muted-foreground">1,000,000,000,000</div>
                 <div className="font-medium">1조</div>
               </div>
               <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 border border-border/30">
-                <div className="text-muted-foreground">1234567890000</div>
+                <div className="text-muted-foreground">1,234,567,890,000</div>
                 <div className="font-medium">1조 2345억 6789만</div>
               </div>
             </div>
