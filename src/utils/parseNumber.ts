@@ -36,6 +36,7 @@ export const parseKoreanNumber = (text: string): number | null => {
   
   let result = 0;
   let currentNumber = 0;
+  let temp = 0;
   let digitFound = false;
   
   for (let i = 0; i < text.length; i++) {
@@ -49,6 +50,7 @@ export const parseKoreanNumber = (text: string): number | null => {
     }
     
     // Check for units
+    let unitFound = false;
     for (const unit in koreanUnits) {
       if (text.substring(i).startsWith(unit)) {
         const unitValue = koreanUnits[unit];
@@ -59,23 +61,38 @@ export const parseKoreanNumber = (text: string): number | null => {
         }
         
         if (unitValue >= 10000) {
-          // For large units (만, 억, 조, 경), add the accumulated value multiplied by the unit
-          result += currentNumber * unitValue;
+          // For large units (만, 억, 조, 경)
+          // First add the current temp value to the result
+          temp += currentNumber;
+          // Then multiply by the unit and add to the result
+          result += temp * unitValue;
+          // Reset temp and currentNumber for next calculation
+          temp = 0;
           currentNumber = 0;
         } else {
-          // For small units (십, 백, 천), multiply the current number by the unit
-          currentNumber *= unitValue;
+          // For small units (십, 백, 천)
+          // Add to the temp value (e.g., 삼천 = 3 * 1000 = 3000)
+          temp += currentNumber * unitValue;
+          currentNumber = 0;
         }
         
         digitFound = false;
         i += unit.length - 1; // Skip the unit characters
+        unitFound = true;
         break;
       }
     }
+    
+    // If no unit was found and there's a digit, add it to temp
+    if (!unitFound && digitFound) {
+      temp += currentNumber;
+      currentNumber = 0;
+      digitFound = false;
+    }
   }
   
-  // Add any remaining value
-  result += currentNumber;
+  // Add any remaining values
+  result += temp + currentNumber;
   
   return result > 0 ? result : null;
 };
