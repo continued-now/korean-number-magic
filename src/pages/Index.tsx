@@ -13,6 +13,10 @@ const Index = () => {
   
   const handleNumberChange = (value: number | null) => {
     setNumber(value);
+    // Also update the input field when a new number is entered in one of the result fields
+    if (value !== null) {
+      setInputValue(value.toString());
+    }
   };
   
   return (
@@ -43,6 +47,7 @@ const Index = () => {
             <div className="pt-2">
               <ResultDisplay 
                 number={number} 
+                onNumberChange={handleNumberChange}
                 className="transition-all duration-500"
               />
             </div>
