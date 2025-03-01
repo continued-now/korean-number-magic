@@ -31,10 +31,10 @@ const Index = () => {
               한국어 숫자 변환기
             </div>
             <h1 className="text-3xl font-light tracking-tight">
-              Korean Number Formatter
+              Numa
             </h1>
             <p className="text-muted-foreground mt-2 max-w-sm mx-auto">
-              숫자를 입력하면 한국어 단위로 변환해 드립니다.
+              Numbers Assistant - 숫자를 입력하면 한국어 단위로 변환해 드립니다.
             </p>
           </div>
           
@@ -82,7 +82,7 @@ const Index = () => {
       
       {/* Footer */}
       <footer className="mt-16 text-xs text-muted-foreground animate-fade-in" style={{ animationDelay: "0.3s" }}>
-        <p>Korean Number Magic &copy; {new Date().getFullYear()}</p>
+        <p>Committed &copy; 2025</p>
       </footer>
     </div>
   );
