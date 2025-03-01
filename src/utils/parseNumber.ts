@@ -36,8 +36,11 @@ export const parseKoreanNumber = (text: string): number | null => {
   
   let result = 0;
   let currentNumber = 0;
-  let temp = 0;
+  let currentGroup = 0;
   let digitFound = false;
+  
+  // Sort units by length in descending order to match longer units first
+  const sortedUnits = Object.keys(koreanUnits).sort((a, b) => b.length - a.length);
   
   for (let i = 0; i < text.length; i++) {
     const char = text.charAt(i);
@@ -51,7 +54,8 @@ export const parseKoreanNumber = (text: string): number | null => {
     
     // Check for units
     let unitFound = false;
-    for (const unit in koreanUnits) {
+    
+    for (const unit of sortedUnits) {
       if (text.substring(i).startsWith(unit)) {
         const unitValue = koreanUnits[unit];
         
@@ -62,17 +66,19 @@ export const parseKoreanNumber = (text: string): number | null => {
         
         if (unitValue >= 10000) {
           // For large units (만, 억, 조, 경)
-          // First add the current temp value to the result
-          temp += currentNumber;
-          // Then multiply by the unit and add to the result
-          result += temp * unitValue;
-          // Reset temp and currentNumber for next calculation
-          temp = 0;
+          // Add the current accumulated number to the current group
+          currentGroup += currentNumber;
+          
+          // Then multiply the current group by the unit value and add to the result
+          result += currentGroup * unitValue;
+          
+          // Reset for next group
+          currentGroup = 0;
           currentNumber = 0;
         } else {
           // For small units (십, 백, 천)
-          // Add to the temp value (e.g., 삼천 = 3 * 1000 = 3000)
-          temp += currentNumber * unitValue;
+          // Add to the current group value (e.g., 구십 = 9 * 10 = 90)
+          currentGroup += currentNumber * unitValue;
           currentNumber = 0;
         }
         
@@ -83,16 +89,16 @@ export const parseKoreanNumber = (text: string): number | null => {
       }
     }
     
-    // If no unit was found and there's a digit, add it to temp
+    // If no unit was found and there's a digit, add it to the current group
     if (!unitFound && digitFound) {
-      temp += currentNumber;
+      currentGroup += currentNumber;
       currentNumber = 0;
       digitFound = false;
     }
   }
   
   // Add any remaining values
-  result += temp + currentNumber;
+  result += currentGroup + currentNumber;
   
   return result > 0 ? result : null;
 };
