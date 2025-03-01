@@ -31,7 +31,7 @@ const Index = () => {
               한국어 숫자 변환기
             </div>
             <h1 className="text-3xl font-light tracking-tight">
-              Numa
+              숫자 변환기
             </h1>
             <p className="text-muted-foreground mt-2 max-w-sm mx-auto">
               Numbers Assistant - 숫자를 입력하면 한국어 단위로 변환해 드립니다.
