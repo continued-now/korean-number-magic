@@ -13,8 +13,10 @@ const Index = () => {
   
   const handleNumberChange = (value: number | null) => {
     setNumber(value);
-    // Also update the input field when a new number is entered in one of the result fields
-    if (value !== null) {
+    
+    // Only update the input field when a number is entered directly in the input field
+    // Don't update when changes come from the result fields
+    if (value !== null && document.activeElement?.tagName !== 'INPUT') {
       setInputValue(value.toString());
     }
   };

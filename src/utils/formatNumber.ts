@@ -153,7 +153,7 @@ export const isValidNumber = (value: string): boolean => {
   // Allow empty strings
   if (value === '') return true;
   
-  // Check for valid number pattern (allow decimal and negative numbers)
-  const numRegex = /^-?[0-9]*\.?[0-9]*$/;
+  // Check for valid number pattern (allow decimal and negative numbers, and commas)
+  const numRegex = /^-?[0-9,]*\.?[0-9]*$/;
   return numRegex.test(value);
 };

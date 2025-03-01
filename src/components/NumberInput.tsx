@@ -20,9 +20,12 @@ const NumberInput: React.FC<NumberInputProps> = ({ value, onChange, onNumberChan
       return;
     }
 
+    // Remove commas for numeric validation
+    const valueWithoutCommas = value.replace(/,/g, '');
+
     // Try to parse as a regular number first
-    if (isValidNumber(value)) {
-      const parsedValue = Number(value);
+    if (isValidNumber(valueWithoutCommas)) {
+      const parsedValue = Number(valueWithoutCommas);
       if (isNaN(parsedValue)) {
         setError('유효한 숫자가 아닙니다');
         onNumberChange(null);
