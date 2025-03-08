@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { isValidNumber } from '../utils/formatNumber';
 import { parseKoreanNumber } from '../utils/parseNumber';
+import Numpad from './Numpad';
+import { useIsMobile } from '../hooks/use-mobile';
 
 interface NumberInputProps {
   value: string;
@@ -12,6 +14,8 @@ interface NumberInputProps {
 const NumberInput: React.FC<NumberInputProps> = ({ value, onChange, onNumberChange }) => {
   const [error, setError] = useState<string | null>(null);
   const [isFocused, setIsFocused] = useState(false);
+  const [showKeyboard, setShowKeyboard] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (value === '') {
@@ -59,6 +63,22 @@ const NumberInput: React.FC<NumberInputProps> = ({ value, onChange, onNumberChan
     onChange(e.target.value);
   };
 
+  const handleNumPress = (num: string) => {
+    onChange(value + num);
+  };
+
+  const handleBackspace = () => {
+    onChange(value.slice(0, -1));
+  };
+
+  const handleClear = () => {
+    onChange('');
+  };
+
+  const toggleInputMethod = () => {
+    setShowKeyboard(!showKeyboard);
+  };
+
   return (
     <div className="space-y-2 w-full">
       <div 
@@ -80,7 +100,17 @@ const NumberInput: React.FC<NumberInputProps> = ({ value, onChange, onNumberChan
           }`}
           aria-invalid={!!error}
           aria-describedby={error ? "number-error" : undefined}
+          readOnly={isMobile && !showKeyboard}
         />
+        
+        {isMobile && (
+          <button 
+            onClick={toggleInputMethod}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs bg-primary/10 text-primary px-2 py-1 rounded-full"
+          >
+            {showKeyboard ? '숫자패드' : '키보드'}
+          </button>
+        )}
       </div>
       
       {error && (
@@ -90,6 +120,14 @@ const NumberInput: React.FC<NumberInputProps> = ({ value, onChange, onNumberChan
         >
           {error}
         </p>
+      )}
+
+      {isMobile && !showKeyboard && (
+        <Numpad 
+          onNumPress={handleNumPress} 
+          onBackspace={handleBackspace} 
+          onClear={handleClear} 
+        />
       )}
     </div>
   );
